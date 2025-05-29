@@ -160,6 +160,78 @@ function setupEventListeners() {
     }
 }
 
+// הגדרת מאזיני אירועים לדיאלוג הוספת פלייליסט
+function setupPlaylistModalListeners() {
+    console.log('מגדיר מאזיני אירועים לדיאלוג הוספת פלייליסט');
+    
+    // טיפול בהוספת פלייליסט
+    const addPlaylistBtn = document.getElementById('addPlaylistBtn');
+    const playlistModal = document.getElementById('playlistModal');
+    const closeModalBtn = document.querySelector('.close-modal');
+    const addPlaylistForm = document.getElementById('addPlaylistForm');
+    
+    // פתיחת הדיאלוג
+    if (addPlaylistBtn) {
+        addPlaylistBtn.addEventListener('click', () => {
+            playlistModal.style.display = 'block';
+        });
+    }
+    
+    // סגירת הדיאלוג בלחיצה על X
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', () => {
+            playlistModal.style.display = 'none';
+        });
+    }
+    
+    // סגירת הדיאלוג בלחיצה מחוץ לתוכן
+    window.addEventListener('click', (event) => {
+        if (event.target === playlistModal) {
+            playlistModal.style.display = 'none';
+        }
+    });
+    
+    // טיפול בשליחת הטופס
+    if (addPlaylistForm) {
+        addPlaylistForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            
+            const name = document.getElementById('playlistName').value;
+            const id = document.getElementById('playlistId').value;
+            const description = document.getElementById('playlistDescription').value;
+            
+            if (name && id) {
+                // בדיקה שהמזהה תקין
+                if (!id.match(/^PL[a-zA-Z0-9_-]+$/)) {
+                    alert('מזהה הפלייליסט אינו תקין. אנא העתק את המזהה מכתובת ה-URL של הפלייליסט ביוטיוב.');
+                    return;
+                }
+                
+                // הוספת אימוג'י בתחילת השם אם אין כזה
+                const nameWithEmoji = name.match(/^\p{Emoji}/u) ? name : `🎵 ${name}`;
+                
+                // ניסיון להוסיף את הפלייליסט
+                if (PlaylistManager.addCustomPlaylist(nameWithEmoji, id, description)) {
+                    alert('הפלייליסט נוסף בהצלחה!');
+                    playlistModal.style.display = 'none';
+                    
+                    // איפוס הטופס
+                    addPlaylistForm.reset();
+                    
+                    // מעבר לפלייליסט החדש
+                    PlaylistManager.currentIndex = PlaylistManager.playlists.length - 1;
+                    PlaylistManager.updatePlaylistDisplay();
+                    MusicPlayer.changePlaylist('current');
+                } else {
+                    alert('אירעה שגיאה בהוספת הפלייליסט.');
+                }
+            } else {
+                alert('אנא מלא את כל השדות הנדרשים.');
+            }
+        });
+    }
+}
+
 // הוספת מאזין טעינת דף
 window.addEventListener('load', () => {
     console.log('הדף נטען');
@@ -175,6 +247,9 @@ window.addEventListener('load', () => {
     
     // הגדרת מאזיני אירועים
     setupEventListeners();
+    
+    // הגדרת מאזיני אירועים לדיאלוג הוספת פלייליסט
+    setupPlaylistModalListeners();
     
     // אם הנגן לא נטען אחרי 5 שניות, נסה לטעון ישירות
     setTimeout(() => {

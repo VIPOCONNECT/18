@@ -14,7 +14,7 @@ const PlaylistManager = {
         },
         { 
             id: 'PLXwcztXXCVLkIkfJzrR1Ka0fP9Zjm6bzx', 
-            name: '🎤 שלמה ארצי', 
+            name: '🎴 שלמה ארצי', 
             description: 'שירים נבחרים של שלמה ארצי' 
         },
         { 
@@ -45,9 +45,13 @@ const PlaylistManager = {
     // שם מפתח עבור אחסון מקומי
     localStorageKey: 'carMusicPlayer_playlist',
     
+    // מפתח עבור פלייליסטים מותאמים אישית
+    localStorageKeyCustomPlaylists: 'carMusicPlayer_customPlaylists',
+    
     // אתחול מנהל הפלייליסטים
     init: function() {
         console.log('אתחול מנהל הפלייליסטים');
+        this.loadCustomPlaylists(); // טעינת פלייליסטים מותאמים אישית
         this.loadSavedPlaylist();
         this.updatePlaylistDisplay();
     },
@@ -132,5 +136,82 @@ const PlaylistManager = {
                 playlistInfo.classList.remove('playlist-change-animation');
             }, 500);
         }
+    },
+    // טעינת פלייליסטים מותאמים אישית
+    loadCustomPlaylists: function() {
+        try {
+            const customPlaylistsJson = localStorage.getItem(this.localStorageKeyCustomPlaylists);
+            if (customPlaylistsJson) {
+                const customPlaylists = JSON.parse(customPlaylistsJson);
+                // הוספת הפלייליסטים המותאמים לרשימה הכללית
+                this.playlists = [...this.playlists, ...customPlaylists];
+                console.log(`נטענו ${customPlaylists.length} פלייליסטים מותאמים אישית`);
+            }
+        } catch (error) {
+            console.error('שגיאה בטעינת פלייליסטים מותאמים אישית:', error);
+        }
+    },
+    
+    // הוספת פלייליסט מותאם אישית
+    addCustomPlaylist: function(name, id, description) {
+        // יצירת אובייקט פלייליסט חדש
+        const newPlaylist = {
+            id: id,
+            name: name,
+            description: description,
+            isCustom: true  // סימון שזה פלייליסט מותאם אישית
+        };
+        
+        try {
+            // טעינת פלייליסטים קיימים
+            let customPlaylists = [];
+            const customPlaylistsJson = localStorage.getItem(this.localStorageKeyCustomPlaylists);
+            
+            if (customPlaylistsJson) {
+                customPlaylists = JSON.parse(customPlaylistsJson);
+            }
+            
+            // הוספת הפלייליסט החדש
+            customPlaylists.push(newPlaylist);
+            
+            // שמירה חזרה ב-localStorage
+            localStorage.setItem(this.localStorageKeyCustomPlaylists, JSON.stringify(customPlaylists));
+            
+            // הוספת הפלייליסט לרשימה הנוכחית
+            this.playlists.push(newPlaylist);
+            
+            console.log(`נוסף פלייליסט חדש: ${name}`);
+            return true;
+        } catch (error) {
+            console.error('שגיאה בהוספת פלייליסט מותאם אישית:', error);
+            return false;
+        }
+    },
+    
+    // הסרת פלייליסט מותאם אישית
+    removeCustomPlaylist: function(playlistId) {
+        try {
+            // טעינת פלייליסטים קיימים
+            const customPlaylistsJson = localStorage.getItem(this.localStorageKeyCustomPlaylists);
+            
+            if (customPlaylistsJson) {
+                let customPlaylists = JSON.parse(customPlaylistsJson);
+                
+                // הסרת הפלייליסט
+                customPlaylists = customPlaylists.filter(p => p.id !== playlistId);
+                
+                // שמירה חזרה ב-localStorage
+                localStorage.setItem(this.localStorageKeyCustomPlaylists, JSON.stringify(customPlaylists));
+                
+                // עדכון הרשימה הנוכחית
+                this.playlists = this.playlists.filter(p => p.id !== playlistId);
+                
+                console.log(`הוסר פלייליסט עם מזהה: ${playlistId}`);
+                return true;
+            }
+        } catch (error) {
+            console.error('שגיאה בהסרת פלייליסט מותאם אישית:', error);
+        }
+        return false;
     }
 };
