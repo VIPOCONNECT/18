@@ -76,11 +76,19 @@
             
             <!-- ניווט בין פלייליסטים -->
             <div class="playlist-navigation">
-                <button id="prevPlaylistBtn" class="playlist-nav-btn" aria-label="פלייליסט קודם">
-                    <i class="fas fa-chevron-right"></i> פלייליסט קודם
+                <button id="prevPlaylistBtn" class="nav-btn">
+                    <i class="fas fa-arrow-left"></i>
                 </button>
-                <button id="nextPlaylistBtn" class="playlist-nav-btn" aria-label="פלייליסט הבא">
-                    פלייליסט הבא <i class="fas fa-chevron-left"></i>
+                <div id="playlistInfo">טוען פלייליסט...</div>
+                <button id="nextPlaylistBtn" class="nav-btn">
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+            
+            <!-- ניהול פלייליסטים -->
+            <div class="playlist-management">
+                <button id="addPlaylistBtn" class="add-playlist-btn">
+                    <i class="fas fa-plus-circle"></i> הוסף פלייליסט מותאם אישית
                 </button>
             </div>
         </div>
@@ -98,5 +106,28 @@
     <script src="js/theme.js"></script>
     <script src="js/pwa.js"></script>
     <script src="js/app.js"></script>
+    <!-- דיאלוג להוספת פלייליסט -->
+    <div id="playlistModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>הוסף פלייליסט חדש</h3>
+            <form id="addPlaylistForm">
+                <div class="form-group">
+                    <label for="playlistName">שם הפלייליסט:</label>
+                    <input type="text" id="playlistName" required placeholder="לדוגמה: השירים האהובים שלי">
+                </div>
+                <div class="form-group">
+                    <label for="playlistId">מזהה הפלייליסט ביוטיוב:</label>
+                    <input type="text" id="playlistId" required placeholder="לדוגמה: PLxxxxxxxxxxxxxxx">
+                    <small>* העתק את מזהה הפלייליסט מה-URL של יוטיוב</small>
+                </div>
+                <div class="form-group">
+                    <label for="playlistDescription">תיאור קצר:</label>
+                    <textarea id="playlistDescription" placeholder="תיאור קצר של הפלייליסט"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">הוסף פלייליסט</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
