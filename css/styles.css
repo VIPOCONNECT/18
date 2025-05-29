@@ -1,0 +1,469 @@
+/* 
+ * נגן מוזיקה לרכב - עיצוב מורחב
+ * שלב 4: תכונות מתקדמות ומצבי יום/לילה
+ */
+
+/* משתני CSS לערכות נושא */
+:root {
+    --background-color: #121212;
+    --text-color: #ffffff;
+    --primary-color: #1db954;
+    --secondary-color: #535353;
+    --player-background: #000000;
+    --control-background: rgba(18, 18, 18, 0.8);
+    --shadow-color: rgba(0, 0, 0, 0.5);
+    --transition-speed: 0.3s;
+}
+
+/* איפוס כללי */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+
+body {
+    font-family: 'Rubik', Arial, sans-serif;
+    direction: rtl;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    text-align: center;
+    padding: 10px;
+    overflow: hidden;
+}
+
+/* מיכל ראשי של הנגן */
+.music-player {
+    width: 100%;
+    max-width: 500px;
+    background-color: var(--player-background);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 5px 15px var(--shadow-color);
+    border: 2px solid #1db954;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin: 0 auto;
+}
+
+/* כותרת הנגן */
+.player-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #1db954;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* מיכל נגן הוידאו */
+.video-frame {
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%; /* יחס 16:9 */
+    position: relative;
+    border-radius: 10px;
+    border: 2px solid #1db954;
+    overflow: hidden;
+    background-color: #000;
+    margin-bottom: 15px;
+}
+
+.video-frame iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* אזור כפתורי השליטה */
+.control-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 5px 0;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+/* עיצוב כפתורים */
+.control-btn {
+    background-color: rgba(29, 185, 84, 0.2);
+    color: var(--text-color);
+    border: 1px solid var(--primary-color);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.control-btn:hover {
+    background-color: #169c46;
+    transform: scale(1.05);
+}
+
+.control-btn:active {
+    transform: scale(0.95);
+}
+
+/* מידע על הפלייליסט */
+.playlist-info {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.3);
+    margin: 10px 0;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.playlist-name {
+    font-size: 18px;
+    color: var(--primary-color);
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.playlist-description {
+    font-size: 14px;
+    color: var(--secondary-color);
+    margin-bottom: 12px;
+}
+
+/* כפתורי ניווט פלייליסטים */
+.playlist-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.playlist-nav-btn {
+    background-color: rgba(29, 185, 84, 0.2);
+    color: var(--text-color);
+    border: 1px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.playlist-nav-btn:hover {
+    background-color: rgba(29, 185, 84, 0.4);
+}
+
+.playlist-nav-btn:active {
+    transform: scale(0.95);
+}
+
+/* אנימציית החלפת פלייליסט */
+@keyframes playlistChange {
+    0% { transform: translateY(0); opacity: 1; }
+    20% { transform: translateY(10px); opacity: 0; }
+    80% { transform: translateY(-10px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+.playlist-change-animation {
+    animation: playlistChange 0.5s ease;
+}
+
+/* הודעת סטטוס */
+.status-message {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.2);
+    color: #ccc;
+    font-size: 14px;
+}
+
+/* תצוגת שיר נוכחי */
+.current-song-container {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    padding: 8px 12px;
+    margin: 5px 0;
+    border-right: 3px solid #1db954;
+    text-align: right;
+}
+
+.current-song-label {
+    font-size: 0.8em;
+    color: #ccc;
+    margin-bottom: 3px;
+}
+
+.current-song {
+    font-weight: bold;
+    color: #1db954;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 1.1em;
+}
+
+/* בקר עוצמת שמע */
+.volume-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin: 5px 0;
+    padding: 5px;
+}
+
+.volume-icon {
+    background: none;
+    border: none;
+    color: #1db954;
+    font-size: 20px;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.volume-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 5px;
+    background: linear-gradient(to right, #1db954 0%, #1db954 100%, #666 100%);
+    border-radius: 5px;
+    outline: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background-color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background-color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+
+/* כפתור ערבוב פעיל */
+.shuffle-active {
+    background-color: #0a7d37;
+    box-shadow: 0 0 10px rgba(29, 185, 84, 0.7);
+}
+
+/* התאמה למסכים קטנים */
+@media (max-width: 480px) {
+    .music-player {
+        padding: 15px;
+        gap: 8px;
+    }
+    
+    .player-title {
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
+    
+    .control-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 16px;
+    }
+    
+    .volume-slider {
+        height: 4px;
+    }
+    
+    .playlist-nav-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    
+    .playlist-description {
+        font-size: 12px;
+        margin-bottom: 8px;
+    }
+}
+
+/* מידע על השיר הנוכחי */
+.current-track-info {
+    background-color: var(--control-background);
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all var(--transition-speed);
+}
+
+.track-title {
+    font-size: 16px;
+    color: var(--text-color);
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.track-time {
+    font-size: 14px;
+    color: var(--secondary-color);
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.progress-container {
+    width: 100%;
+    height: 6px;
+    background-color: var(--secondary-color);
+    border-radius: 3px;
+    margin-top: 8px;
+    position: relative;
+    cursor: pointer;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: var(--primary-color);
+    border-radius: 3px;
+    width: 0%;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+/* כפתור החלפת ערכת נושא */
+.theme-toggle {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background-color: transparent;
+    color: var(--text-color);
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 100;
+    padding: 5px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: rotate(15deg);
+}
+
+/* כפתור התקנה PWA */
+.install-btn {
+    display: none; /* יוצג רק כאשר האפליקציה זמינה להתקנה */
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* הנפשה עבור מצבי יום/לילה */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+/* עיצוב שורת כותרת */
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    position: relative;
+}
+
+.app-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--primary-color);
+    text-align: center;
+    position: relative;
+}
+
+.app-title::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 3px;
+    background-color: var(--primary-color);
+    margin: 5px auto 0;
+    border-radius: 2px;
+}
+
+/* תמיכה במסכים גדולים יותר */
+@media (min-width: 992px) {
+    .container {
+        max-width: 900px;
+    }
+    
+    .controls-row {
+        gap: 25px;
+    }
+    
+    .control-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 22px;
+    }
+}
