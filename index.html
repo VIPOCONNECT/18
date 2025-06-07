@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ספות יוקרה א</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="flipbook.js" defer></script>
+</head>
+<body>
+    <div class="flipbook-container fullscreen">
+        <div class="flipbook-header">
+            <h1>ספות יוקרה א</h1>
+            <div class="controls">
+                <button id="prev-btn" title="עמוד קודם">&#10094;</button>
+                <span id="page-num">1</span> / <span id="page-count">17</span>
+                <button id="next-btn" title="עמוד הבא">&#10095;</button>
+                <button id="fullscreen-btn" title="מסך מלא">⛶</button>
+            </div>
+        </div>
+        
+        <div class="flipbook-viewer">
+            <div id="book">
+                <!-- Pages will be inserted here by JavaScript -->
+            </div>
+        </div>
+        
+        <!-- אזור התמונות הממוזערות הוסר כדי לנצל את כל שטח המסך -->
+        
+        <div class="flipbook-footer">
+            <p>נוצר באמצעות מערכת המרת PDF לקטלוג דיגיטלי</p>
+        </div>
+    </div>
+    
+    <script>
+        // Catalog data will be inserted here
+        var catalogData = {"title": "ספות יוקרה א", "pages": 17, "theme": "מודרני", "createdAt": "2025-06-07 16:35:44", "pageInfo": [{"pageNumber": 1, "imagePath": "images/page_1.webp", "thumbPath": "thumbs/thumb_1.webp"}, {"pageNumber": 2, "imagePath": "images/page_2.webp", "thumbPath": "thumbs/thumb_2.webp"}, {"pageNumber": 3, "imagePath": "images/page_3.webp", "thumbPath": "thumbs/thumb_3.webp"}, {"pageNumber": 4, "imagePath": "images/page_4.webp", "thumbPath": "thumbs/thumb_4.webp"}, {"pageNumber": 5, "imagePath": "images/page_5.webp", "thumbPath": "thumbs/thumb_5.webp"}, {"pageNumber": 6, "imagePath": "images/page_6.webp", "thumbPath": "thumbs/thumb_6.webp"}, {"pageNumber": 7, "imagePath": "images/page_7.webp", "thumbPath": "thumbs/thumb_7.webp"}, {"pageNumber": 8, "imagePath": "images/page_8.webp", "thumbPath": "thumbs/thumb_8.webp"}, {"pageNumber": 9, "imagePath": "images/page_9.webp", "thumbPath": "thumbs/thumb_9.webp"}, {"pageNumber": 10, "imagePath": "images/page_10.webp", "thumbPath": "thumbs/thumb_10.webp"}, {"pageNumber": 11, "imagePath": "images/page_11.webp", "thumbPath": "thumbs/thumb_11.webp"}, {"pageNumber": 12, "imagePath": "images/page_12.webp", "thumbPath": "thumbs/thumb_12.webp"}, {"pageNumber": 13, "imagePath": "images/page_13.webp", "thumbPath": "thumbs/thumb_13.webp"}, {"pageNumber": 14, "imagePath": "images/page_14.webp", "thumbPath": "thumbs/thumb_14.webp"}, {"pageNumber": 15, "imagePath": "images/page_15.webp", "thumbPath": "thumbs/thumb_15.webp"}, {"pageNumber": 16, "imagePath": "images/page_16.webp", "thumbPath": "thumbs/thumb_16.webp"}, {"pageNumber": 17, "imagePath": "images/page_17.webp", "thumbPath": "thumbs/thumb_17.webp"}], "fullscreen": true, "backgroundColor": "#333333"};
+    </script>
+</body>
+</html>
